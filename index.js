@@ -85,7 +85,7 @@ function kittenMessage(recipientId, text) {
                                 }, {
                                 "type": "postback",
                                 "title": "I like this",
-                                "payload": "User " + recipientId + " likes kitten " + imageUrl,
+                                "payload": "User likes kitten " + imageUrl,
                             }]
                         }]
                     }
@@ -93,7 +93,6 @@ function kittenMessage(recipientId, text) {
             };
     
             sendMessage(recipientId, message);
-            
             return true;
         }
     }  
