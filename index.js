@@ -26,11 +26,14 @@ app.get('/webhook', function (req, res) {
 
 // handler receiving messages
 app.post('/webhook', function (req, res) {
+    console.log("Webhook invoked: " + req);
+
     var events = req.body.entry[0].messaging;
     for (i = 0; i < events.length; i++) {
         var event = events[i];
         if (event.message && event.message.text) {
             if (!kittenMessage(event.sender.id, event.message.text)) {
+                console.log("Echo: " + event.message.text);
                 sendMessage(event.sender.id, { text: "Echo: " + event.message.text });
             }
         } else if (event.postback) {
@@ -43,6 +46,8 @@ app.post('/webhook', function (req, res) {
 
 // generic function sending messages
 function sendMessage(recipientId, message) {
+    console.log("Sending message: [recipient-id] " + recipientId + " [message] " + message);
+
     request({
         url: 'https://graph.facebook.com/v2.6/me/messages',
         qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
@@ -55,7 +60,7 @@ function sendMessage(recipientId, message) {
         if (error) {
             console.log('Error sending message: ', error);
         } else if (response.body.error) {
-            console.log('Error: ', response.body.error);
+            console.log('Error sending message: ', response.body.error);
         }
     });
 };
@@ -99,6 +104,8 @@ function kittenMessage(recipientId, text) {
 
 // Register persistent menu
 function registerPersistentMenu() {
+    console.log("Registering persistent menu...");
+
     message = {
         "setting_type": "call_to_actions",
         "thread_state": "existing_thread",
