@@ -12,6 +12,9 @@ app.get('/', function (req, res) {
     res.send('This is TestBot Server');
 });
 
+// Register persistent menu
+registerPersistentMenu();
+
 // Facebook Webhook
 app.get('/webhook', function (req, res) {
     if (req.query['hub.verify_token'] === 'testbot_verify_token') {
@@ -92,4 +95,37 @@ function kittenMessage(recipientId, text) {
         return true;
     }
     return false;
+};
+
+// Register persistent menu
+function registerPersistentMenu() {
+    message = {
+        "setting_type": "call_to_actions",
+        "thread_state": "existing_thread",
+        "call_to_actions": [
+            {
+                "type": "postback",
+                "title": "Help",
+                "payload": "DEVELOPER_DEFINED_PAYLOAD_FOR_HELP"
+            },
+            {
+                "type": "postback",
+                "title": "Start a New Order",
+                "payload": "DEVELOPER_DEFINED_PAYLOAD_FOR_START_ORDER"
+            }
+        ]
+    };
+
+    request({
+        url: 'https://graph.facebook.com/v2.6/me/thread_settings',
+        qs: { access_token: process.env.PAGE_ACCESS_TOKEN },
+        method: 'POST',
+        json: message
+    }, function (error, response, body) {
+        if (error) {
+            console.log('Error sending persistent menu message: ', error);
+        } else if (response.body.error) {
+            console.log('Error sending persistent menu message: ', response.body.error);
+        }
+    });
 };
