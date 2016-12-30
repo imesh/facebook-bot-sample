@@ -17,6 +17,8 @@ registerPersistentMenu();
 
 // Facebook Webhook
 app.get('/webhook', function (req, res) {
+    console.log("GET webhook invoked: " + req.url);
+
     if (req.query['hub.verify_token'] === 'testbot_verify_token') {
         res.send(req.query['hub.challenge']);
     } else {
@@ -26,11 +28,13 @@ app.get('/webhook', function (req, res) {
 
 // handler receiving messages
 app.post('/webhook', function (req, res) {
-    console.log("Webhook invoked: " + req);
+    console.log("POST Webhook invoked: " + req.body);
 
     var events = req.body.entry[0].messaging;
     for (i = 0; i < events.length; i++) {
         var event = events[i];
+        console.log("Processing event " + i);
+
         if (event.message && event.message.text) {
             if (!kittenMessage(event.sender.id, event.message.text)) {
                 console.log("Echo: " + event.message.text);
