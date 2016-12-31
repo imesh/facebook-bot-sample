@@ -2,6 +2,12 @@
 
 This is a sample Facebook Messenger Bot application written in Node.js for understanding the basic concepts. Thanks to x-team.com [1] for providing step by step instructions for writing this from scratch.
 
+# Features
+
+- Echo back any given message to the user
+- Render a graphical output using the keyword "kitten"
+- Adds a persistent menu
+
 # Things To Be Improved
 
 Currently the POST /webhook API method does not handle authentication requests, message delivery confirmations, message read notifications, etc [4]. This needs to be handled to avoid unnecessary error messages on the server side.
